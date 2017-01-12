@@ -8,10 +8,7 @@ var filter = require("./filter.json");
 var projection = require("./projection.json");
 var options = require("./options.json");
 
-var config = {
-  commandHost: "https://cmd.nq-m.com",
-  queryHost: "https://q.nq-m.com"  
-};
+const config = {tdxHost: "https://tdx.nq-m.com"};
 
 var api = new TDXApi(config);
 Promise.promisifyAll(api);
