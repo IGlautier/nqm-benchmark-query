@@ -17,8 +17,7 @@ var api = new TDXApi(config);
 Promise.promisifyAll(api);
 
 var run = function(remaining, results, cb) {
-  if (remaining >= 0) {
-    console.log("Runs left: %d", remaining);
+  if (remaining > 0) {
     const start = process.hrtime();
     api.getDatasetDataAsync(datasetId, filter, projection, options)
     .then(() => {
@@ -37,13 +36,14 @@ var run = function(remaining, results, cb) {
 }
 
 var stats = function(results) {
-  var std = math.std(results);
-  var mean = math.mean(results);
-  _.remove(results, (result) => {
-    if (result > mean) return mean + 2 * std < result;
-    else return mean - 2 * std > result;
-  });
-  console.log("Median execution time from %d runs with outliers excluded was %d milliseconds", results.length, Math.round(math.median(results) / 1000000));
+  var std = Math.round(math.std(results) / 1000000);
+  var mean = Math.round(math.mean(results) / 1000000);
+  var median = Math.round(math.median(results) / 1000000);
+
+  console.log("Results for %d runs", results.length);
+  console.log("Median: %d milliseconds", median);
+  console.log("Mean: %d milliseconds", mean);
+  console.log("Standard deviation: %d milliseconds", std);
 };
 
 var nRuns = argv.nRuns;
